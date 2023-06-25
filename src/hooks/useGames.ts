@@ -13,6 +13,7 @@ export interface Game {
   name: string;
   background_image: string;
   parent_platforms: { platform: Platform }[];
+  metacritic: number;
 }
 
 interface FetchGamesResponse {
@@ -56,3 +57,5 @@ export default useGames;
 //6. We are adding the symbols to the gamaecard so we add additonal props to the interface.
 // parent_platforms is not a platform array, it is an array of objects where each object has a property
 // called platform of the type Platform, which we defined above it. Confusing api.
+
+//7. Now, we have a property called maetcritic, or critic score.
