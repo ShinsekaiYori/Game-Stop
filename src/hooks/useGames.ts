@@ -2,10 +2,17 @@ import { useState, useEffect } from "react";
 import apiClient from "../services/api-client";
 import { CanceledError } from "axios";
 
+export interface Platform {
+  id: number;
+  name: string;
+  slug: string;
+}
+
 export interface Game {
   id: number;
   name: string;
   background_image: string;
+  parent_platforms: { platform: Platform }[];
 }
 
 interface FetchGamesResponse {
@@ -45,3 +52,7 @@ export default useGames;
 //3. Added dependencies to the effect.
 //4. Added controller and cleanup function of controller.
 //5.Check the working and verify in Network dev tool.
+
+//6. We are adding the symbols to the gamaecard so we add additonal props to the interface.
+// parent_platforms is not a platform array, it is an array of objects where each object has a property
+// called platform of the type Platform, which we defined above it. Confusing api.
