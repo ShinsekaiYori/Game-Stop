@@ -1,36 +1,17 @@
-import { useState, useEffect } from "react";
-import apiClient from "../services/api-client";
-import { Text } from "@chakra-ui/react";
-
-interface Game {
-  id: number;
-  name: string;
-}
-
-interface FetchGamesResponse {
-  count: number;
-  results: Game[];
-}
+import { SimpleGrid, Text } from "@chakra-ui/react";
+import useGames from "../hooks/useGames";
+import GameCard from "./GameCard";
 
 const GameGrid = () => {
-  const [games, setGames] = useState<Game[]>([]);
-  const [error, setError] = useState("");
-
-  useEffect(() => {
-    apiClient
-      .get<FetchGamesResponse>("/games")
-      .then((res) => setGames(res.data.results))
-      .catch((err) => setError(err.message));
-  });
-
+  const { games, error } = useGames();
   return (
     <>
       {error && <Text>{error}</Text>}
-      <ul>
+      <SimpleGrid columns={{ sm: 1, md: 2, lg: 3, xl: 5 }} spacing={10}>
         {games.map((game) => (
-          <li key={game.id}>{game.name}</li>
+          <GameCard key={game.id} game={game} />
         ))}
-      </ul>
+      </SimpleGrid>
     </>
   );
 };
@@ -55,3 +36,19 @@ export default GameGrid;
 
 //6. Add <FetchGamesResponse> for the shape of response
 // object to be that of FetchgamesResponse object.
+
+//7. The markup knows a lot of HTTP to and fro.Our components
+// should primarily responsible for "returning markup" and
+// handling user interaction at a high level.
+// 2 option - a. move the logic of http req into a service
+// b.moving the statevariable and effect inside a hook.
+// So, hooks, apart from sharing functionality across components
+// , but also for sperating concern and making code more modular
+
+//8. Now, the component is lot cleaner, as it knows nothing
+//about making HTTP  request.
+
+//9. We now change the ul to SimpleGrid component and
+// change the li to GameCard component.
+//10. In columns, we hardcoded 3, later, we added an object
+//
