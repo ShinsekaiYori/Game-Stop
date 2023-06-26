@@ -11,7 +11,7 @@ interface Props {
 
 const GameCard = ({ game }: Props) => {
   return (
-    <Card borderRadius={10} overflow="hidden">
+    <Card width="270px" borderRadius={10} overflow="hidden">
       <Image src={getCroppedImageUrl(game.background_image)} />
       <CardBody>
         <Heading fontSize="2xl">{game.name}</Heading>
@@ -46,3 +46,4 @@ export default GameCard;
 //8.We created a seprate component for the platform icons and removed the mapping to be placed in that componenet.
 //9.We crated a seprate component for the score
 //10.We want the icons and score to be side by side so we warp them in a horizontal stack.
+//

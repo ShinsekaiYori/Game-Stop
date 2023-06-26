@@ -1,13 +1,23 @@
 import { SimpleGrid, Text } from "@chakra-ui/react";
 import useGames from "../hooks/useGames";
 import GameCard from "./GameCard";
+import GameCardSkeleton from "./GameCardSkeleton";
 
 const GameGrid = () => {
-  const { games, error } = useGames();
+  const { games, error, isLoading } = useGames();
+  const skeletons = [1, 2, 3, 4, 5, 6];
+
   return (
     <>
       {error && <Text>{error}</Text>}
-      <SimpleGrid columns={{ sm: 1, md: 2, lg: 3, xl: 5 }} spacing={10}>
+      <SimpleGrid
+        columns={{ sm: 1, md: 2, lg: 3, xl: 5 }}
+        padding="10px"
+        spacing={10}
+      >
+        {isLoading &&
+          skeletons.map((skeleton) => <GameCardSkeleton key={skeleton} />)}
+
         {games.map((game) => (
           <GameCard key={game.id} game={game} />
         ))}
@@ -51,4 +61,13 @@ export default GameGrid;
 //9. We now change the ul to SimpleGrid component and
 // change the li to GameCard component.
 //10. In columns, we hardcoded 3, later, we added an object
+//
+
+//11. We made a skeleton compoenet and for rendering it in the grid,
+// we need to know the loading state so import it too.
+
+//12.First intialize the skeleton number in an array for verify, then just
+// put the dynamic conditon of isloading and ising the gamecard skeleton to true.
+
+//13. When refrshed , we see 6 skeleton loading.number and sizes are wrong.
 //
