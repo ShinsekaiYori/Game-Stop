@@ -1,17 +1,32 @@
+import { HStack, Image, List, ListItem, Text } from "@chakra-ui/react";
 import useGenres from "../hooks/useGenre";
+import getCroppedImageUrl from "../services/image-url";
 
 const GenreList = () => {
   const { data } = useGenres();
 
   return (
-    <ul>
+    <List>
       {data.map((genre) => (
-        <li key={genre.id}>{genre.name}</li>
+        <ListItem key={genre.id} paddingY="5px">
+          <HStack>
+            <Image
+              boxSize="32px"
+              borderRadius={8}
+              src={getCroppedImageUrl(genre.image_background)}
+            />
+            <Text fontSize="lg">{genre.name}</Text>
+          </HStack>
+        </ListItem>
       ))}
-    </ul>
+    </List>
   );
 };
 
 export default GenreList;
 
 //1. To fetch genre, we create a hook similar to one we ceated for fetching the games.
+
+//2.Replcing ul with list component gives a list without bullet componenet
+
+//3. To add padding to the side - 1.To the list
