@@ -3,6 +3,7 @@ import apiClient from "../services/api-client";
 import { CanceledError } from "axios";
 import useData from "./useData";
 import { Genre } from "./useGenre";
+import { GameQuery } from "../App";
 
 export interface Platform {
   id: number;
@@ -18,19 +19,16 @@ export interface Game {
   metacritic: number;
 }
 
-const useGames = (
-  selectedGenre: Genre | null,
-  selectedPlatform: Platform | null
-) =>
+const useGames = (gameQuery: GameQuery) =>
   useData<Game>(
     "/games",
     {
       params: {
-        genres: selectedGenre?.id,
-        platforms: selectedPlatform?.id,
+        genres: gameQuery.genre?.id,
+        platforms: gameQuery.platform?.id,
       },
     },
-    [selectedGenre?.id, selectedPlatform?.id]
+    [gameQuery]
   );
 
 export default useGames;
@@ -52,3 +50,5 @@ export default useGames;
 
 //We create a state to track loading state. For the skeleton, we will
 // create a seperate component.
+
+//8. //14. Imported gamequery so to make it more neat and easy.

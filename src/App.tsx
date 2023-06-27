@@ -6,12 +6,19 @@ import { useState } from "react";
 import { Genre } from "./hooks/useGenre";
 import PlatformSelector from "./components/PlatformSelector";
 import { Platform } from "./hooks/useGames";
+
+export interface GameQuery {
+  genre: Genre | null;
+  platform: Platform | null;
+}
+
 function App() {
-  const [selectedGenre, setSelectedGenre] = useState<Genre | null>(null);
-  //can hold a genre object or null
-  const [selectedPlatform, setSelectedPlatform] = useState<Platform | null>(
-    null
-  );
+  // const [selectedGenre, setSelectedGenre] = useState<Genre | null>(null);
+  // //can hold a genre object or null
+  // const [selectedPlatform, setSelectedPlatform] = useState<Platform | null>(
+  //   null
+  // );
+  const [gameQuery, setGameQuery] = useState<GameQuery>({} as GameQuery);
 
   return (
     <Grid
@@ -30,21 +37,20 @@ function App() {
       <Show above="lg">
         <GridItem area="aside" paddingX={5}>
           <GenreList
-            selectedGenre={selectedGenre}
-            onSelectGenre={(genre) => setSelectedGenre(genre)}
+            selectedGenre={gameQuery.genre}
+            onSelectGenre={(genre) => setGameQuery({ ...gameQuery, genre })}
           />
         </GridItem>
       </Show>
 
       <GridItem area="main">
         <PlatformSelector
-          selectedPlatform={selectedPlatform}
-          onSelectPlatform={(platform) => setSelectedPlatform(platform)}
+          selectedPlatform={gameQuery.platform}
+          onSelectPlatform={(platform) =>
+            setGameQuery({ ...gameQuery, platform })
+          }
         />
-        <GameGrid
-          selectedPlatform={selectedPlatform}
-          selectedGenre={selectedGenre}
-        />
+        <GameGrid gameQuery={gameQuery} />
       </GridItem>
     </Grid>
   );
@@ -56,3 +62,6 @@ export default App;
 //2.  To ensure our side panel is shown only on large devices
 // , we wrap it inside a show  component.
 //3. attribute like above and below.Above means lg and above.
+
+//4. Refactoring - to make the variables at one place, we will make a quey object
+// that contains all the information we need to query the games.
