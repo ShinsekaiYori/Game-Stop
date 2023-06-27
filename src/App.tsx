@@ -12,6 +12,7 @@ export interface GameQuery {
   genre: Genre | null;
   platform: Platform | null;
   sortOrder: string;
+  searchText: string;
 }
 
 function App() {
@@ -34,7 +35,9 @@ function App() {
       }}
     >
       <GridItem area="nav">
-        <NavBar />
+        <NavBar
+          onSearch={(searchText) => setGameQuery({ ...gameQuery, searchText })}
+        />
       </GridItem>
       <Show above="lg">
         <GridItem area="aside" paddingX={5}>
@@ -78,3 +81,6 @@ export default App;
 
 //4. Refactoring - to make the variables at one place, we will make a quey object
 // that contains all the information we need to query the games.
+
+//5. For applying searching function, we may have to first go to Navbar and then to SeaechInput.
+// This is not idea or SearchInput is not a direct child of App componenet, NavBar is.
