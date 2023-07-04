@@ -31,7 +31,7 @@ const GameGrid = ({ gameQuery }: Props) => {
     <InfiniteScroll
       dataLength={fetchGamesCount}
       hasMore={!!hasNextPage}
-      next={() => fetchNextPage}
+      next={() => fetchNextPage()}
       loader={<Spinner />}
     >
       <SimpleGrid
