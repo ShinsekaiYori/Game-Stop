@@ -1,9 +1,7 @@
-import { useState, useEffect } from "react";
 import apiClient from "../services/api-client";
-import { CanceledError } from "axios";
-import useData from "./useData";
-import { Genre } from "./useGenre";
 import { GameQuery } from "../App";
+import { useQuery } from "@tanstack/react-query";
+import { Fetchresponse } from "../services/api-client";
 
 export interface Platform {
   id: number;
@@ -22,18 +20,20 @@ export interface Game {
 // rating_top=whole number, rating=floating number
 
 const useGames = (gameQuery: GameQuery) =>
-  useData<Game>(
-    "/games",
-    {
-      params: {
-        genres: gameQuery.genre?.id,
-        platforms: gameQuery.platform?.id,
-        ordering: gameQuery.sortOrder,
-        search: gameQuery.searchText,
-      },
-    },
-    [gameQuery]
-  );
+  useQuery<Fetchresponse<Game>, Error>({
+    queryKey: ["games", gameQuery],
+    queryFn: () =>
+      apiClient
+        .get<Fetchresponse<Game>>("/games", {
+          params: {
+            genres: gameQuery.genre?.id,
+            parent_platforms: gameQuery.platform?.id,
+            ordering: gameQuery.sortOrder,
+            search: gameQuery.searchText,
+          },
+        })
+        .then((res) => res.data),
+  });
 
 export default useGames;
 
@@ -56,3 +56,7 @@ export default useGames;
 // create a seperate component.
 
 //8. //14. Imported gamequery so to make it more neat and easy.
+
+//2.
+
+//1.Replace the data hook with query hook as better functionality there.

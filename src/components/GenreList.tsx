@@ -29,7 +29,7 @@ const GenreList = ({ selectedGenre, onSelectGenre }: Props) => {
         Genres
       </Heading>
       <List>
-        {data.map((genre) => (
+        {data?.results.map((genre) => (
           <ListItem key={genre.id} paddingY="5px">
             <HStack>
               <Image
@@ -76,3 +76,10 @@ export default GenreList;
 // use "normal". Also, it is deafult centre-centered so textalign=left.
 
 //8.objectFit="cover" - images are scaled to fill the container while preserving the aspect ratio.
+
+//2
+
+//1. Came from useGnere hook, found error in data - being of any type - in the hook , assigned a generic type parameter.
+
+//2. We get an error on data?.map. We see data has 4 properties but what we need are the genre.So, that means,
+// we need is not a genre array but an object containing those 4 properties, ie.e the data.
