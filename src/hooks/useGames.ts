@@ -1,5 +1,5 @@
 import { GameQuery } from "../App";
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { Fetchresponse } from "../services/api-client";
 import { Platform } from "./usePlatforms";
 import APIClient from "../services/api-client";
@@ -17,17 +17,21 @@ export interface Game {
 // rating_top=whole number, rating=floating number
 
 const useGames = (gameQuery: GameQuery) =>
-  useQuery<Fetchresponse<Game>, Error>({
+  useInfiniteQuery<Fetchresponse<Game>, Error>({
     queryKey: ["games", gameQuery],
-    queryFn: () =>
+    queryFn: ({ pageParam = 1 }) =>
       apiClient.getAll({
         params: {
           genres: gameQuery.genre?.id,
           parent_platforms: gameQuery.platform?.id,
           ordering: gameQuery.sortOrder,
           search: gameQuery.searchText,
+          page: pageParam,
         },
       }),
+    getNextPageParam: (lastPage, allPages) => {
+      return lastPage.next ? allPages.length + 1 : undefined;
+    },
   });
 
 export default useGames;
@@ -55,3 +59,8 @@ export default useGames;
 //2.
 
 //1.Replace the data hook with query hook as better functionality there.
+//2. We replace query with Infinitequery . We shld have our query function receive page no. as parameter.
+//3. We include page in the params and set it to pageParam and then include getNextPageParam param.Rquery calls this function
+// to compute the next page.
+//4. It has 2 parameters - lastPage and allPages. allPages contains data for each page we retrieved.
+//5. Added next:string | undefined to FetchResponse, so the last page condition can be solved.
