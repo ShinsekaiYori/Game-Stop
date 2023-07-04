@@ -10,8 +10,8 @@ import SortSelector from "./components/SortSelector";
 import GameHeading from "./components/GameHeading";
 
 export interface GameQuery {
-  genre: Genre | null;
-  platform: Platform | null;
+  genreId?: number;
+  platformId?: number;
   sortOrder: string;
   searchText: string;
 }
@@ -43,8 +43,10 @@ function App() {
       <Show above="lg">
         <GridItem area="aside" paddingX={5}>
           <GenreList
-            selectedGenre={gameQuery.genre}
-            onSelectGenre={(genre) => setGameQuery({ ...gameQuery, genre })}
+            selectedGenreId={gameQuery.genreId}
+            onSelectGenre={(genre) =>
+              setGameQuery({ ...gameQuery, genreId: genre.id })
+            }
           />
         </GridItem>
       </Show>
@@ -55,9 +57,9 @@ function App() {
           <Flex marginBottom={2}>
             <Box marginRight={5}>
               <PlatformSelector
-                selectedPlatform={gameQuery.platform}
+                selectedPlatformId={gameQuery.platformId}
                 onSelectPlatform={(platform) =>
-                  setGameQuery({ ...gameQuery, platform })
+                  setGameQuery({ ...gameQuery, platformId: platform.id })
                 }
               />
             </Box>
@@ -88,3 +90,8 @@ export default App;
 
 //5. For applying searching function, we may have to first go to Navbar and then to SeaechInput.
 // This is not idea or SearchInput is not a direct child of App componenet, NavBar is.
+
+//2.
+
+//1. We change genre type to number from Genre as we only need genre_id.
+//2. DDifference between undefined and null. Undefined- absence of a value.Null-intentional absence of a value
