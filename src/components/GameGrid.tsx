@@ -1,10 +1,11 @@
-import { Box, Button, SimpleGrid, Text } from "@chakra-ui/react";
+import { SimpleGrid, Spinner, Text } from "@chakra-ui/react";
 import useGames from "../hooks/useGames";
 import GameCard from "./GameCard";
 import GameCardSkeleton from "./GameCardSkeleton";
 import GameCardContainer from "./GameCardContainer";
 import { GameQuery } from "../App";
 import React from "react";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 interface Props {
   gameQuery: GameQuery;
@@ -23,9 +24,21 @@ const GameGrid = ({ gameQuery }: Props) => {
 
   if (error) return <Text>{error.message}</Text>;
 
+  const fetchGamesCount =
+    data?.pages.reduce((total, page) => total + page.results.length, 0) || 0;
+
   return (
-    <Box padding="10px">
-      <SimpleGrid columns={{ sm: 1, md: 2, lg: 3, xl: 4 }} spacing={6}>
+    <InfiniteScroll
+      dataLength={fetchGamesCount}
+      hasMore={!!hasNextPage}
+      next={() => fetchNextPage}
+      loader={<Spinner />}
+    >
+      <SimpleGrid
+        padding="10px"
+        columns={{ sm: 1, md: 2, lg: 3, xl: 4 }}
+        spacing={6}
+      >
         {isLoading &&
           skeletons.map((skeleton) => (
             <GameCardContainer key={skeleton}>
@@ -44,13 +57,12 @@ const GameGrid = ({ gameQuery }: Props) => {
           </React.Fragment>
         ))}
       </SimpleGrid>
-
-      {hasNextPage && (
-        <Button onClick={() => fetchNextPage()} marginY="5">
-          {isFetchingNextPage ? "Loading..." : "Load More"}
-        </Button>
-      )}
-    </Box>
+    </InfiniteScroll>
+    // {/* {hasNextPage && (
+    //   <Button onClick={() => fetchNextPage()} marginY="5">
+    //     {isFetchingNextPage ? "Loading..." : "Load More"}
+    //   </Button>
+    // )} */}
   );
 };
 
@@ -108,3 +120,8 @@ export default GameGrid;
 //Within this fragment, each page's results mapped to a list of game card container.
 
 //2. We take properties like  isFetchingNextPage,fetchNextPage,hasNextPage and then use them for the button.
+
+//3. We installed infinite scroll component and wrapped Simplegrid componenent in it.Then we give properties to it.
+// dataLength = total number of items we have fetched so far.So, compute it first, before returning our markup.
+
+//4. !! converts undefined to boolean false, if undefined comes.
