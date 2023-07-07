@@ -1,4 +1,4 @@
-export interface Trailer {
+export default interface Trailer {
   id: number;
   nme: string;
   preview: string;
